@@ -1,0 +1,36 @@
+bert_emotion_analyzer/
+├── configs/                    # 配置文件
+│   ├── model_config.json      # 模型配置
+│   ├── sentiment_config.yaml  # 情感分析配置
+│   └── paths_config.yaml      # 路径配置
+├── dictionaries/              # 外部词典
+│   ├── sentiment/
+│   │   ├── positive_keywords.json
+│   │   ├── negative_keywords.json
+│   │   └── negation_patterns.json
+│   ├── slang/                 # 网络用语词典
+│   │   ├── positive_slang.json
+│   │   └── negative_slang.json
+│   └── mental_health/         # 心理健康词典
+│       ├── stress.json
+│       ├── emotional_distress.json
+│       └── positive_mindset.json
+├── models/                    # 模型目录
+│   ├── bert_model/           # BERT模型
+│   ├── tfidf_model.pkl       # TF-IDF模型
+│   └── lda_model.pkl         # LDA模型
+├── utils/                    # 工具模块
+│   ├── dictionary_manager.py # 词典管理器
+│   ├── tfidf_analyzer.py    # TF-IDF分析器
+│   ├── lda_topic_modeler.py # LDA主题建模
+│   ├── sentiment_enhancer.py # 情感增强器
+│   ├── mental_health_analyzer.py # 心理健康分析
+│   └── scene_classifier.py  # 场景分类器
+├── data/                     # 数据目录
+│   ├── train.csv
+│   ├── val.csv
+│   └── test.csv
+├── outputs/                  # 输出目录
+│   └── logs/
+├── main.py                   # 主程序
+└── requirements.txt         # 依赖文件

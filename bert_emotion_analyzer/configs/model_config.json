@@ -1,0 +1,152 @@
+{
+  "bert_model": {
+    "name": "bert_emotion_analyzer",
+    "type": "transformer",
+    "version": "1.0.0",
+    
+    "architecture": {
+      "vocab_size": 5000,
+      "hidden_size": 256,
+      "num_hidden_layers": 4,
+      "num_attention_heads": 8,
+      "intermediate_size": 1024,
+      "hidden_act": "gelu",
+      "hidden_dropout_prob": 0.1,
+      "attention_probs_dropout_prob": 0.1,
+      "max_position_embeddings": 128,
+      "type_vocab_size": 2,
+      "initializer_range": 0.02,
+      "layer_norm_eps": 1e-12,
+      "pooling_strategy": "mean"
+    },
+    
+    "classification_head": {
+      "layers": [256, 128, 64],
+      "activations": ["relu", "relu", "relu"],
+      "dropouts": [0.4, 0.3, 0.2],
+      "output_activation": "softmax",
+      "num_classes": 2
+    },
+    
+    "training": {
+      "batch_size": 32,
+      "epochs": 10,
+      "learning_rate": 2e-5,
+      "optimizer": "adam",
+      "loss": "sparse_categorical_crossentropy",
+      "clipnorm": 1.0,
+      "class_weight_balanced": true,
+      "early_stopping_patience": 5,
+      "reduce_lr_patience": 3,
+      "min_lr": 1e-7
+    },
+    
+    "inference": {
+      "max_length": 128,
+      "batch_size": 1,
+      "temperature": 1.0,
+      "top_k": 1,
+      "top_p": 1.0
+    }
+  },
+  
+  "tfidf_model": {
+    "name": "tfidf_feature_extractor",
+    "type": "feature_extraction",
+    "version": "1.0.0",
+    
+    "parameters": {
+      "max_features": 5000,
+      "ngram_range": [1, 2],
+      "min_df": 2,
+      "max_df": 1.0,
+      "stop_words": null,
+      "token_pattern": "(?u)\\b\\w+\\b",
+      "use_idf": true,
+      "smooth_idf": true,
+      "sublinear_tf": false,
+      "norm": "l2"
+    },
+    
+    "features": {
+      "sentiment_keywords": true,
+      "top_keywords_per_text": 20,
+      "ngram_extraction": true,
+      "max_ngrams": 20
+    }
+  },
+  
+  "lda_model": {
+    "name": "lda_topic_modeler",
+    "type": "topic_modeling",
+    "version": "1.0.0",
+    
+    "parameters": {
+      "n_components": 10,
+      "doc_topic_prior": null,
+      "topic_word_prior": null,
+      "learning_method": "online",
+      "learning_decay": 0.7,
+      "learning_offset": 10.0,
+      "max_iter": 20,
+      "batch_size": 128,
+      "evaluate_every": -1,
+      "total_samples": 1000000,
+      "perp_tol": 0.1,
+      "mean_change_tol": 0.001,
+      "max_doc_update_iter": 100,
+      "n_jobs": -1,
+      "verbose": 0,
+      "random_state": 42
+    },
+    
+    "features": {
+      "n_words_per_topic": 15,
+      "sentiment_topic_analysis": true,
+      "topic_threshold_ratio": 1.5,
+      "dominant_topic_threshold": 0.3
+    }
+  },
+  
+  "ensemble": {
+    "name": "hybrid_sentiment_analyzer",
+    "type": "ensemble",
+    "version": "1.0.0",
+    
+    "weights": {
+      "bert": 0.6,
+      "tfidf": 0.2,
+      "lda": 0.15,
+      "rule_based": 0.05
+    },
+    
+    "decision_strategy": "weighted_voting",
+    "fallback_strategy": "bert_only",
+    "confidence_threshold": 0.6,
+    "tie_breaker": "bert"
+  },
+  
+  "performance": {
+    "expected_accuracy": 0.85,
+    "min_accuracy": 0.75,
+    "target_precision": 0.82,
+    "target_recall": 0.83,
+    "target_f1": 0.825,
+    "inference_speed_ms": 100,
+    "training_time_hours": 2.0,
+    "model_size_mb": 50
+  },
+  
+  "metadata": {
+    "created_date": "2024-01-01",
+    "last_updated": "2024-01-01",
+    "author": "Emotion Analysis Team",
+    "description": "高性能混合情感分析模型配置",
+    "environment": {
+      "python_version": ">=3.8",
+      "tensorflow_version": ">=2.10.0",
+      "sklearn_version": ">=1.2.0"
+    },
+    "notes": "模型结合BERT深度语义、TF-IDF统计特征、LDA主题建模和规则系统"
+  }
+}

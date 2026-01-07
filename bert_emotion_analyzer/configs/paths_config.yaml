@@ -1,0 +1,361 @@
+# 路径配置文件
+version: "1.0.0"
+description: "情感分析系统路径配置"
+
+# ============ 项目根目录 ============
+project_root: "."
+
+# ============ 数据目录 ============
+data:
+  root: "${project_root}/data"
+  
+  # 原始数据
+  raw:
+    train: "${data.root}/train_keep_all_cols.csv"
+    validation: "${data.root}/val_keep_all_cols.csv"
+    test: "${data.root}/test_keep_all_cols.csv"
+    
+  # 处理后的数据
+  processed:
+    root: "${data.root}/processed"
+    train_texts: "${data.processed.root}/train_texts.pkl"
+    train_labels: "${data.processed.root}/train_labels.pkl"
+    val_texts: "${data.processed.root}/val_texts.pkl"
+    val_labels: "${data.processed.root}/val_labels.pkl"
+    test_texts: "${data.processed.root}/test_texts.pkl"
+    test_labels: "${data.processed.root}/test_labels.pkl"
+    
+  # 缓存数据
+  cache:
+    root: "${data.root}/cache"
+    tfidf_features: "${data.cache.root}/tfidf_features.pkl"
+    lda_topics: "${data.cache.root}/lda_topics.pkl"
+    encoded_data: "${data.cache.root}/encoded_data.pkl"
+
+# ============ 模型目录 ============
+models:
+  root: "${project_root}/models"
+  
+  # BERT模型
+  bert:
+    root: "${models.root}/bert_model"
+    config: "${models.bert.root}/bert_config.json"
+    checkpoint: "${models.bert.root}/model_checkpoint.h5"
+    weights: "${models.bert.root}/model_weights.h5"
+    tokenizer: "${models.bert.root}/tokenizer.pkl"
+    vocab: "${models.bert.root}/vocab.txt"
+    
+  # TF-IDF模型
+  tfidf:
+    root: "${models.root}/tfidf"
+    vectorizer: "${models.tfidf.root}/tfidf_vectorizer.pkl"
+    features: "${models.tfidf.root}/feature_names.pkl"
+    
+  # LDA模型
+  lda:
+    root: "${models.root}/lda"
+    model: "${models.lda.root}/lda_model.pkl"
+    vectorizer: "${models.lda.root}/count_vectorizer.pkl"
+    topics: "${models.lda.root}/topic_keywords.json"
+    
+  # 集成模型
+  ensemble:
+    root: "${models.root}/ensemble"
+    config: "${models.ensemble.root}/ensemble_config.json"
+    weights: "${models.ensemble.root}/model_weights.pkl"
+    
+  # 模型缓存
+  cache:
+    root: "${models.root}/cache"
+    predictions: "${models.cache.root}/predictions_cache.pkl"
+
+# ============ 词典目录 ============
+dictionaries:
+  root: "${project_root}/dictionaries"
+  
+  # 情感词典
+  sentiment:
+    root: "${dictionaries.root}/sentiment"
+    positive: "${dictionaries.sentiment.root}/positive_keywords.json"
+    negative: "${dictionaries.sentiment.root}/negative_keywords.json"
+    negation: "${dictionaries.sentiment.root}/negation_patterns.json"
+    synonyms: "${dictionaries.sentiment.root}/synonyms.json"
+    compound_patterns: "${dictionaries.sentiment.root}/compound_patterns.json"
+    
+  # 网络用语词典
+  slang:
+    root: "${dictionaries.root}/slang"
+    positive: "${dictionaries.slang.root}/positive_slang.json"
+    negative: "${dictionaries.slang.root}/negative_slang.json"
+    weights: "${dictionaries.slang.root}/slang_weights.json"
+    
+  # 心理健康词典
+  mental_health:
+    root: "${dictionaries.root}/mental_health"
+    stress: "${dictionaries.mental_health.root}/stress.json"
+    emotional_distress: "${dictionaries.mental_health.root}/emotional_distress.json"
+    positive_mindset: "${dictionaries.mental_health.root}/positive_mindset.json"
+    weights: "${dictionaries.mental_health.root}/category_weights.json"
+    
+  # 场景分类词典
+  scenes:
+    root: "${dictionaries.root}/scenes"
+    categories: "${dictionaries.scenes.root}/scene_categories.json"
+    weights: "${dictionaries.scenes.root}/scene_weights.json"
+    
+  # 自定义词典
+  custom:
+    root: "${dictionaries.root}/custom"
+    user_defined: "${dictionaries.custom.root}/user_keywords.json"
+    domain_specific: "${dictionaries.custom.root}/domain_keywords.json"
+
+# ============ 配置目录 ============
+configs:
+  root: "${project_root}/configs"
+  model: "${configs.root}/model_config.json"
+  sentiment: "${configs.root}/sentiment_config.yaml"
+  paths: "${configs.root}/paths_config.yaml"
+  logging: "${configs.root}/logging_config.yaml"
+  monitoring: "${configs.root}/monitoring_config.yaml"
+
+# ============ 工具模块目录 ============
+utils:
+  root: "${project_root}/utils"
+  
+  # 核心工具模块
+  modules:
+    dictionary_manager: "${utils.root}/dictionary_manager.py"
+    tfidf_analyzer: "${utils.root}/tfidf_analyzer.py"
+    lda_topic_modeler: "${utils.root}/lda_topic_modeler.py"
+    sentiment_enhancer: "${utils.root}/sentiment_enhancer.py"
+    mental_health_analyzer: "${utils.root}/mental_health_analyzer.py"
+    scene_classifier: "${utils.root}/scene_classifier.py"
+    slang_detector: "${utils.root}/slang_detector.py"
+    
+  # 辅助工具
+  helpers:
+    text_cleaner: "${utils.root}/helpers/text_cleaner.py"
+    data_loader: "${utils.root}/helpers/data_loader.py"
+    model_utils: "${utils.root}/helpers/model_utils.py"
+    cache_manager: "${utils.root}/helpers/cache_manager.py"
+
+# ============ 输出目录 ============
+outputs:
+  root: "${project_root}/outputs"
+  
+  # 日志文件
+  logs:
+    root: "${outputs.root}/logs"
+    system: "${outputs.logs.root}/system.log"
+    analysis: "${outputs.logs.root}/analysis.log"
+    errors: "${outputs.logs.root}/errors.log"
+    performance: "${outputs.logs.root}/performance.log"
+    
+  # 分析结果
+  results:
+    root: "${outputs.root}/results"
+    
+    # 训练结果
+    training:
+      root: "${outputs.results.root}/training"
+      history: "${outputs.results.training.root}/training_history.json"
+      metrics: "${outputs.results.training.root}/model_metrics.json"
+      confusion_matrix: "${outputs.results.training.root}/confusion_matrix.png"
+      reports: "${outputs.results.training.root}/classification_reports.json"
+      
+    # 测试结果
+    testing:
+      root: "${outputs.results.root}/testing"
+      predictions: "${outputs.results.testing.root}/test_predictions.json"
+      analysis: "${outputs.results.testing.root}/detailed_analysis.json"
+      errors: "${outputs.results.testing.root}/error_cases.json"
+      
+    # 交互结果
+    interactive:
+      root: "${outputs.results.root}/interactive"
+      sessions: "${outputs.results.interactive.root}/session_${timestamp}.json"
+      statistics: "${outputs.results.interactive.root}/usage_statistics.json"
+    
+  # 可视化输出
+  visualizations:
+    root: "${outputs.root}/visualizations"
+    topic_distributions: "${outputs.visualizations.root}/topic_distributions.png"
+    keyword_clouds: "${outputs.visualizations.root}/keyword_cloud.png"
+    sentiment_trends: "${outputs.visualizations.root}/sentiment_trends.png"
+    
+  # 报告文件
+  reports:
+    root: "${outputs.root}/reports"
+    daily: "${outputs.reports.root}/daily_report_${date}.json"
+    weekly: "${outputs.reports.root}/weekly_report_${week}.json"
+    summary: "${outputs.reports.root}/system_summary.json"
+
+# ============ 临时文件目录 ============
+temp:
+  root: "${project_root}/temp"
+  uploads: "${temp.root}/uploads"
+  processing: "${temp.root}/processing"
+  downloads: "${temp.root}/downloads"
+  cleanup_interval_hours: 24
+
+# ============ 备份目录 ============
+backups:
+  root: "${project_root}/backups"
+  
+  # 按类型备份
+  models:
+    root: "${backups.root}/models"
+    daily: "${backups.models.root}/daily_${date}"
+    weekly: "${backups.models.root}/weekly_${week}"
+    
+  dictionaries:
+    root: "${backups.root}/dictionaries"
+    daily: "${backups.dictionaries.root}/daily_${date}"
+    
+  configs:
+    root: "${backups.root}/configs"
+    versioned: "${backups.configs.root}/v${version}"
+    
+  # 备份策略
+  retention:
+    daily: 7
+    weekly: 4
+    monthly: 12
+
+# ============ 环境相关路径 ============
+environment:
+  # 检查必要的目录是否存在
+  required_directories:
+    - "${data.root}"
+    - "${models.root}"
+    - "${dictionaries.root}"
+    - "${configs.root}"
+    - "${outputs.root}"
+    - "${temp.root}"
+    
+  # 检查必要的文件是否存在
+  required_files:
+    - "${data.raw.train}"
+    - "${data.raw.validation}"
+    - "${data.raw.test}"
+    - "${dictionaries.sentiment.positive}"
+    - "${dictionaries.sentiment.negative}"
+    - "${configs.model}"
+    - "${configs.sentiment}"
+    
+  # 可选的目录（不存在会自动创建）
+  optional_directories:
+    - "${data.processed.root}"
+    - "${data.cache.root}"
+    - "${models.bert.root}"
+    - "${models.tfidf.root}"
+    - "${models.lda.root}"
+    - "${models.ensemble.root}"
+    - "${models.cache.root}"
+    - "${outputs.logs.root}"
+    - "${outputs.results.root}"
+    - "${outputs.visualizations.root}"
+    - "${outputs.reports.root}"
+    - "${temp.uploads}"
+    - "${temp.processing}"
+    - "${temp.downloads}"
+    - "${backups.models.root}"
+    - "${backups.dictionaries.root}"
+    - "${backups.configs.root}"
+
+# ============ 路径替换变量 ============
+variables:
+  # 时间变量
+  timestamp: "YYYYMMDD_HHMMSS"
+  date: "YYYYMMDD"
+  week: "YYYY_WW"
+  month: "YYYYMM"
+  
+  # 版本变量
+  version: "1.0.0"
+  
+  # 环境变量
+  project_name: "bert_emotion_analyzer"
+  user_home: "${HOME}"
+  current_dir: "${PWD}"
+
+# ============ 路径验证规则 ============
+validation:
+  # 文件格式检查
+  file_extensions:
+    models: [".pkl", ".h5", ".json", ".txt"]
+    data: [".csv", ".pkl", ".json"]
+    configs: [".json", ".yaml", ".yml"]
+    dictionaries: [".json"]
+    
+  # 大小限制
+  size_limits:
+    model_files_mb: 100
+    data_files_mb: 1000
+    cache_files_mb: 500
+    log_files_mb: 50
+    
+  # 权限检查
+  permissions:
+    read: true
+    write: true
+    execute: false
+    
+  # 符号链接处理
+  symlinks:
+    follow: true
+    create: false
+
+# ============ 跨平台兼容性 ============
+compatibility:
+  # 路径分隔符处理
+  path_separator: "/"  # Linux/Mac风格，Windows会自动转换
+  
+  # 编码处理
+  encoding:
+    default: "utf-8"
+    fallback: "gbk"
+    
+  # 大小写敏感性
+  case_sensitive: false
+  
+  # 特殊字符处理
+  special_chars:
+    allow_spaces: true
+    allow_chinese: true
+    allow_symbols: true
+    escape_sequences: false
+
+# ============ 部署配置 ============
+deployment:
+  # 生产环境路径
+  production:
+    base_dir: "/opt/emotion_analyzer"
+    data_dir: "/var/lib/emotion_analyzer/data"
+    log_dir: "/var/log/emotion_analyzer"
+    
+  # 开发环境路径
+  development:
+    base_dir: "${project_root}"
+    data_dir: "${data.root}"
+    log_dir: "${outputs.logs.root}"
+    
+  # 测试环境路径
+  testing:
+    base_dir: "/tmp/emotion_analyzer_test"
+    data_dir: "/tmp/emotion_analyzer_test/data"
+    log_dir: "/tmp/emotion_analyzer_test/logs"
+
+# ============ 元数据 ============
+metadata:
+  created: "2024-01-01"
+  last_modified: "2024-01-01"
+  author: "系统架构团队"
+  description: "情感分析系统路径配置文件"
+  version: "1.0.0"
+  
+  notes: |
+    路径配置支持变量替换和环境检测
+    所有路径都相对于project_root
+    不存在的目录会自动创建
+    建议使用绝对路径避免混淆

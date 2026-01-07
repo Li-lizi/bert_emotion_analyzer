@@ -1,0 +1,270 @@
+# 情感分析系统配置
+version: "1.0.0"
+description: "微博评论情感分析系统配置"
+
+# ============ 模型参数 ============
+models:
+  bert:
+    batch_size: 32
+    epochs: 10
+    learning_rate: 2.0e-5
+    max_length: 128
+    warmup_steps: 100
+    
+  tfidf:
+    max_features: 5000
+    ngram_range: [1, 2]
+    min_df: 2
+    max_df: 1.0
+    stop_words: null
+    
+  lda:
+    n_topics: 10
+    n_words_per_topic: 15
+    learning_method: "online"
+    max_iter: 20
+    random_state: 42
+
+# ============ 情感分析规则 ============
+sentiment_rules:
+  # 置信度调整规则权重
+  rule_weights:
+    specific_negation: 0.85      # 特定否定模式："心情不好"等
+    depression_pattern: 0.90      # 低迷情绪模式："兴趣不高"等
+    compound_pattern: 0.95        # 复合模式："考试没考好"等
+    slang_indication: 0.80        # 网络用语指示
+    tfidf_negative: 0.75          # TF-IDF强烈负面指示
+    tfidf_positive: 0.75          # TF-IDF强烈正面指示
+    lda_negative: 0.70            # LDA主题负面指示
+    lda_positive: 0.70            # LDA主题正面指示
+    strong_negative: 0.85         # 强负面关键词特征
+    strong_positive: 0.85         # 强正面关键词特征
+    negation_context: 0.80        # 否定词上下文
+    double_negation: 0.65         # 双重否定
+    
+  # 置信度调整参数
+  confidence_adjustment:
+    model_correction_factor: 0.3
+    min_confidence: 0.6
+    max_confidence: 1.0
+    irony_dampening_factor: 0.6   # 反讽模式降低系数
+    intensity_boost_factor: 0.1   # 强度修饰提升系数
+    
+  # 关键词权重配置
+  keyword_weights:
+    core_negative: 1.0
+    education_related: 1.5        # 教育相关负面词权重更高
+    emotion_low: 1.3
+    interest_related: 1.4
+    social_interaction: 1.2
+    compound_patterns: 2.0        # 复合模式权重最高
+    slang_negative: 2.5           # 网络用语权重
+    slang_positive: 2.5
+    mental_health: 2.0            # 心理健康关键词权重
+
+# ============ 阈值配置 ============
+thresholds:
+  # 情感判断阈值
+  sentiment:
+    positive_threshold: 0.55
+    negative_threshold: 0.45
+    neutral_range: [0.45, 0.55]
+    
+  # 特征阈值
+  features:
+    strong_negative_count: 3      # 强负面特征计数阈值
+    strong_positive_count: 3      # 强正面特征计数阈值
+    tfidf_sentiment_ratio: 0.3    # TF-IDF情感比率阈值
+    lda_sentiment_ratio: 0.4      # LDA情感比率阈值
+    specific_pattern_min: 1       # 特定模式最小计数
+    
+  # 心理健康标签阈值
+  mental_health:
+    confidence_threshold: 0.3
+    min_keywords: 1
+    max_labels: 2
+
+# ============ 文本处理配置 ============
+text_processing:
+  # 文本清洗
+  cleaning:
+    remove_urls: true
+    remove_mentions: true
+    remove_hashtags: false
+    remove_emojis: false
+    remove_numbers: false
+    keep_punctuation: true
+    max_length: 128
+    
+  # 分词配置
+  tokenization:
+    language: "chinese"
+    use_jieba: true
+    jieba_dict: "default"
+    custom_words: []
+    
+  # 编码配置
+  encoding:
+    default: "utf-8-sig"
+    fallback: "gbk"
+    ignore_errors: false
+
+# ============ 分析组件配置 ============
+components:
+  # 心理健康分析器
+  mental_health_analyzer:
+    enabled: true
+    categories:
+      - name: "压力倾诉"
+        weight: 2.0
+        min_confidence: 0.3
+        
+      - name: "情绪困扰"
+        weight: 2.5
+        min_confidence: 0.3
+        
+      - name: "积极心态"
+        weight: 1.8
+        min_confidence: 0.3
+        
+    max_keywords_display: 3
+    max_categories_display: 2
+    
+  # 场景分类器
+  scene_classifier:
+    enabled: true
+    max_scenes: 2
+    confidence_threshold: 0.1
+    default_scene: "日常表达"
+    
+    categories:
+      工作:
+        weight: 1.0
+        keywords: ["工作", "加班", "上班", "同事", "老板"]
+        
+      家庭:
+        weight: 1.0
+        keywords: ["家庭", "家人", "父母", "妈妈", "爸爸"]
+        
+      学校:
+        weight: 1.2  # 学校场景权重更高
+        keywords: ["学校", "学习", "老师", "同学", "考试"]
+        
+      # ... 其他场景配置
+    
+  # 网络术语检测器
+  slang_detector:
+    enabled: true
+    max_display: 3
+    confidence_threshold: 0.4
+    weight_multiplier: 2.0
+
+# ============ 缓存配置 ============
+caching:
+  enabled: true
+  max_size: 1000
+  ttl_seconds: 3600
+  
+  # 缓存项配置
+  items:
+    bert_predictions: true
+    tfidf_features: true
+    lda_topics: true
+    keyword_analysis: true
+    pattern_analysis: true
+
+# ============ 日志配置 ============
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file:
+    enabled: true
+    path: "outputs/logs/emotion_analyzer.log"
+    max_size_mb: 10
+    backup_count: 5
+    
+  console:
+    enabled: true
+    colorful: true
+
+# ============ 性能监控 ============
+monitoring:
+  enabled: true
+  metrics:
+    - "accuracy"
+    - "inference_time"
+    - "memory_usage"
+    - "cache_hit_rate"
+    
+  alerts:
+    accuracy_below: 0.7
+    inference_time_above_ms: 200
+    memory_usage_above_mb: 1024
+
+# ============ 数据配置 ============
+data:
+  # 训练数据配置
+  training:
+    total_size: 8000
+    train_ratio: 0.7
+    val_ratio: 0.15
+    test_ratio: 0.15
+    pos_neg_ratio: 0.5
+    augmentation_factor: 0.2
+    
+  # 数据增强配置
+  augmentation:
+    enabled: true
+    methods:
+      synonym_replacement:
+        enabled: true
+        probability: 0.3
+        
+      random_deletion:
+        enabled: true
+        probability: 0.2
+        max_deletion_ratio: 0.25
+        
+      back_translation:
+        enabled: false  # 暂时禁用
+        
+    synonym_dictionaries:
+      - category: "sentiment"
+        name: "synonyms"
+        subcategory: "basic"
+
+# ============ 系统参数 ============
+system:
+  random_seed: 42
+  parallel_workers: 4
+  use_gpu: true
+  memory_limit_gb: 4
+  tensorflow_jit: true
+  
+  # 环境变量
+  environment:
+    TF_CPP_MIN_LOG_LEVEL: "3"
+    TF_USE_LEGACY_KERAS: "1"
+    OMP_NUM_THREADS: "1"
+    TF_DETERMINISTIC_OPS: "1"
+    TF_ENABLE_ONEDNN_OPTS: "0"
+    
+  # 优化设置
+  optimization:
+    tf_inter_op_threads: "auto"
+    tf_intra_op_threads: 2
+    tf_data_prefetch: "auto"
+    tf_data_parallel_calls: "auto"
+
+# ============ 版本信息 ============
+metadata:
+  created: "2024-01-01"
+  last_modified: "2024-01-01"
+  author: "情感分析团队"
+  contact: "emotion-team@example.com"
+  license: "MIT"
+  
+  changelog:
+    - version: "1.0.0"
+      date: "2024-01-01"
+      changes: "初始版本，包含BERT、TF-IDF、LDA混合模型"
